@@ -49,6 +49,7 @@ steps:
   inputs:
     SonarCloud: 'sonarCloud'
     organization: 'devopsfoundationlab'
+    projectKey: 'DevOpsFoundationLab_microservicio-spring'
     scannerMode: 'Other'
 
 - task: Gradle@3
