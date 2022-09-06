@@ -13,17 +13,21 @@ steps:
     testResultsFiles: '**/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
     sonarQubeRunAnalysis: false
-    spotBugsAnalysis: false
-  displayName: 'Build Plugin'
+    spotBugsAnalysis: true
+  displayName: 'Build'
 
 - task: CopyFiles@2
+  displayName: 'Prepare artifact'
   inputs:
     sourceFolder: '$(Build.SourcesDirectory)'
     contents: |
         **/build/libs/*.jar
+        **/build/**/*.xml
+        **/application.properties
     targetFolder: '$(Build.ArtifactStagingDirectory)'
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish artifact'
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: appJar
@@ -54,7 +58,7 @@ steps:
 - task: Gradle@3
   inputs:
     gradleWrapperFile: 'gradlew'
-    tasks: "build jacocoTestReport"
+    tasks: "jacocoTestReport"
     javaHomeOption: 'JDKVersion'
     sonarQubeRunAnalysis: true
     sqGradlePluginVersionChoice: 'specify'
