@@ -35,7 +35,7 @@ steps:
 
 - task: PublishCodeCoverageResults@1
   inputs:
-    codeCoverageTool: 'JaCoCo' # Available options: 'JaCoCo', 'Cobertura'
+    codeCoverageTool: 'JaCoCo' 
     summaryFileLocation: '$(Build.ArtifactStagingDirectory)/reports/jacoco/test/jacocoTestReport.xml'
     reportDirectory: '$(Build.ArtifactStagingDirectory)/reports/jacoco/test/html'
 
