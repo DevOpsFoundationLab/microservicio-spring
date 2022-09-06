@@ -2,7 +2,8 @@
 pool:
   vmImage: ubuntu-latest
 
-trigger: ['feature-ms-raulRiquelme-labFinal'] 
+trigger: 
+- feature-ms-raulRiquelme-labFinal 
 
 steps:
 - task: Gradle@3
