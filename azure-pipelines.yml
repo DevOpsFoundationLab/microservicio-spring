@@ -8,7 +8,7 @@ steps:
 - task: Gradle@3
   inputs:
     gradleWrapperFile: 'gradlew'
-    tasks: 'build jacocoTestReport'
+    tasks: 'build test'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
@@ -33,12 +33,6 @@ steps:
     artifactName: appJar
     publishLocation: 'Container'
 
-- task: PublishCodeCoverageResults@1
-  inputs:
-    codeCoverageTool: 'JaCoCo' 
-    summaryFileLocation: '$(Build.ArtifactStagingDirectory)/reports/jacoco/test/jacocoTestReport.xml'
-    reportDirectory: '$(Build.ArtifactStagingDirectory)/reports/jacoco/test/html'
-
 - task: DownloadBuildArtifacts@0
   inputs:
     buildType: 'current'
@@ -49,21 +43,28 @@ steps:
 
 - task: SonarCloudPrepare@1
   inputs:
-    SonarCloud: 'sonarCloud'
+    SonarCloud: 'sonarCloudDevOps'
     organization: 'devopsfoundationlab'
     projectKey: 'DevOpsFoundationLab_microservicio-spring'
+    projectName: 'microservicio-spring'
     extraProperties: |
       sonar.coverage.jacoco.xmlReportPaths=$(Pipeline.Workspace)/appJar/build/reports/jacoco/test/jacocoTestReport.xml
 
 - task: Gradle@3
   inputs:
     gradleWrapperFile: 'gradlew'
-    tasks: "jacocoTestReport"
+    tasks: "build jacocoTestReport"
     javaHomeOption: 'JDKVersion'
     sonarQubeRunAnalysis: true
     sqGradlePluginVersionChoice: 'specify'
     sonarQubeGradlePluginVersion: '3.3'
   displayName: 'Analyze current Branch'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'JaCoCo' 
+    summaryFileLocation: '$(Build.ArtifactStagingDirectory)/reports/jacoco/test/jacocoTestReport.xml'
+    reportDirectory: '$(Build.ArtifactStagingDirectory)/reports/jacoco/test/html'
 
 - task: SonarCloudPublish@1
   inputs:
